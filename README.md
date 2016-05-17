@@ -13,9 +13,9 @@ Examples
 ```PHP
 include 'Somtoday.php';
 
-$som = SOMtodayUser("henk","mypassword","myschool","dembrin")
+$som = SOMtodayUser("henk","mypassword","myschool","dembrin");
 
-$som->changeHomeworkStatus("6374673","7364736", true)
+$som->changeHomeworkStatus("6374673","7364736", true);
 ```
 
 Footnote
