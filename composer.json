@@ -1,0 +1,19 @@
+{
+    "name": "rickbakkr/somtoday",
+    "type": "library",
+    "description": "API for SomToday",
+    "license": "MIT",
+    "authors": [{
+            "name": "Rick Bakker",
+            "homepage": "http://www.rickbakker.eu/",
+            "email": "rickbakkr@gmail.com"
+        }],
+    "autoload": {
+        "psr-4": {
+            "SOMtoday\\": "src/SOMtoday"
+        }
+    },
+    "require": {
+      "php": ">=5.3.0"
+    }
+}
