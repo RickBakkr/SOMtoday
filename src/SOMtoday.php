@@ -6,3 +6,5 @@
  * @copyright 2016
  *
  */
+
+namespace SOMtoday;
