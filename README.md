@@ -1,22 +1,6 @@
 # SOMtoday
 PHP wrapper for SOMtoday api
-
-Installation
-============
-1. Download the file
-2. Put it in the same folder as the script you would like to use it in
-3. ``include "Somtoday.php"``
-4. Make a neat gun for the people who are still alive!
-
-Examples
-===========
-```PHP
-include 'Somtoday.php';
-
-$som = SOMtodayUser("henk","mypassword","myschool","dembrin")
-
-$som->changeHomeworkStatus("6374673","7364736", true)
-```
+This API is currently under development. The V2 will be made to work with Composer. You can take a look at the development in this branch. 
 
 Footnote
 =========
