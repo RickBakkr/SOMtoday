@@ -11,11 +11,17 @@ Installation
 Examples
 ===========
 ```PHP
-include 'Somtoday.php';
+include 'somtoday.php';
 
-$som = new SOMtodayUser("henk","mypassword","myschool","dembrin");
+$som = new SOMtodayUser('123456','MySafePassword',"MySchoolAbbreviation", 'pupil', 'BRIN');
+or
+$som = new SOMtodayUser('123456','MySafePassword',"MySchoolAbbreviation");
 
-$som->changeHomeworkStatus("6374673","7364736", true);
+To set homework done:
+$som->changeHomeworkStatus("1234567","1234567", 1);
+
+To set homework undone:
+$som->changeHomeworkStatus("1234567","1234567", 0);
 ```
 
 Footnote
