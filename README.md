@@ -11,20 +11,31 @@ Installation
 Examples
 ===========
 ```PHP
+// Include the SomToday class
 include 'somtoday.php';
 
+// Create an instance of the SOMtoday class
 $som = new SOMtoday('123456','MySafePassword',"MySchoolAbbreviation", 'pupil', 'BRIN');
-or
+// or
 $som = new SOMtoday('123456','MySafePassword',"MySchoolAbbreviation");
 
-To set homework done:
+//To get your grades:
+$som->getGrades();
+
+//To get your schedule:
+$som->getSchedule(); // or getSchedule(NUMBER OF DAYS);
+
+//To get your homework:
+$som->getHomework(); // or getHomework(NUMBER OF DAYS);
+
+//To set homework done:
 $som->changeHomeworkStatus("1234567","1234567", 1);
 
-To set homework undone:
+//To set homework undone:
 $som->changeHomeworkStatus("1234567","1234567", 0);
 ```
 
 Footnote
 =========
-questions? rickbakkr@gmail.com
-Only send proper mails. Inappropriate e-mails will be deleted immediately.
+If you have any questions, don't hesitate to send a mail to rickbakkr@gmail.com
+Please only send proper mails. Inappropriate e-mails will be deleted immediately.
