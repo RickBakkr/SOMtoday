@@ -13,9 +13,9 @@ Examples
 ```PHP
 include 'somtoday.php';
 
-$som = new SOMtodayUser('123456','MySafePassword',"MySchoolAbbreviation", 'pupil', 'BRIN');
+$som = new SOMtoday('123456','MySafePassword',"MySchoolAbbreviation", 'pupil', 'BRIN');
 or
-$som = new SOMtodayUser('123456','MySafePassword',"MySchoolAbbreviation");
+$som = new SOMtoday('123456','MySafePassword',"MySchoolAbbreviation");
 
 To set homework done:
 $som->changeHomeworkStatus("1234567","1234567", 1);
