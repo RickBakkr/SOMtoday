@@ -1,21 +1,15 @@
 <?php
 
 /**
- * @author Stephan Meijer <me@stephanmeijer.com>
- * @copyright MIT (09/11/2014)
- * @version 1.0.0
- */
-
-/**
  * @author Rick Bakker <rickbakkr@gmail.com>
- * @version 1.0.1
+ * @version 2.0.0
  * 
- * This version is working at 20-12-2015.
- * SOM might do changes since then! 
+ * Please be aware of this:
+ * Even though the class is functional at the time of release, SOM might do changes in the near future which will break the class! 
  *
  */
 
-class SOMtodayUser
+class SOMtoday
 {
     
     public $pupilID;
@@ -27,6 +21,8 @@ class SOMtodayUser
     private $password;
     
     public $schoolName;
+  
+    public $type;
     
     /**
      * BRIN-code
@@ -44,9 +40,10 @@ class SOMtodayUser
      * @param String $username User's SOMtoday username
      * @param String $password User's SOMtoday password
      * @param String $schoolName The name of your school, as found on http://servers.somtoday.nl
+     * @param String $type Tells the class to either use -elo
      * @param String $BRIN The BRIN-code of your school, an unique identifier
      */
-    function __construct($username, $password, $schoolName, $BRIN = null)
+    function __construct($username, $password, $schoolName, $type = "pupil", $BRIN = null)
     {
         
         $this->username   = $username;
@@ -57,8 +54,9 @@ class SOMtodayUser
         } else {
             $this->BRIN = $BRIN;
         }
+        $this->type = $type;
         
-        $login = $this->login($username, $password);
+        $login = $this->authenticate($username, $password);
         
     }
     
@@ -68,16 +66,19 @@ class SOMtodayUser
      * @param String $schoolName Plain-text abbreviation
      * @return String BRIN of the institiution
      */
-    private function brinLookup($schoolName)
+    private function brinLookup($schoolIdentifier)
     {
         $servers = file_get_contents('http://servers.somtoday.nl/');
-        $servers = json_decode($servers, true);
+        $serverList = json_decode($servers, true);
             
-        foreach($servers[0]['instellingen'] as $instelling) 
+        if(is_array($serverList)) 
         {
-            if($instelling['afkorting'] == $schoolName) 
+            foreach($serverList[0]['instellingen'] as $settings)
             {
-                return $instelling['brin'];
+                if($settings['afkorting'] == $schoolIdentifier)
+                {
+                    return $settings['brin'];
+                }
             }
         }
         return false;
@@ -91,14 +92,10 @@ class SOMtodayUser
      */
     private function hashAndEncodePassword($password)
     {
-        // Yes, SOMtoday is using SHA1. This is a shame!
         $hash = sha1($password, true);
-        // Base64, how useless..
         $hash = base64_encode($hash);
-        // Converting string to hex, another useless layer
         $hash = bin2hex($hash);
         return $hash;
-        
     }
     
     /**
@@ -110,18 +107,18 @@ class SOMtodayUser
      * @return Array Server Response
      * 
      */
-    private function login($username, $password)
+    private function authenticate($username, $password)
     {
         
         $passwordHash = $this->hashAndEncodePassword($password);
         $username     = base64_encode($username);
+        $identifier = "elo";
+        $baseURL = "https://" . $this->schoolName . "-" . $identifier . ".somtoday.nl/services/mobile/v10/";
         
-        $baseURL = "https://somtoday.nl/" . $this->schoolName . "/services/mobile/v10/";
-        
-        $url = $baseURL . "Login/CheckMultiLoginB64/" . $username . "/" . $passwordHash . "/" . $this->BRIN;
+        $url = $baseURL . "Login/GetMD/" . $username . "/" . $passwordHash . "/" . $this->BRIN . "/";
         
         $response = json_decode(file_get_contents($url), true);
-        
+      
         if ($response["error"] == "SUCCESS") {
             
             $fullName = $response["leerlingen"][0]["fullName"];
@@ -132,11 +129,15 @@ class SOMtodayUser
             $this->pupilID  = $pupilID;
             $this->password = $passwordHash;
             $this->username = $username;
+            $this->dToken = $response["device"]["dToken"];
+            $this->aToken = $response["device"]["aToken"];
             
             return array(
                 "success" => true,
                 "fullname" => $fullName,
-                "pupil_id" => $pupilID
+                "pupil_id" => $pupilID,
+                "dToken"  => $response["device"]["dToken"],
+                "aToken"  => $response["device"]["aToken"]
             );
             
         } elseif ($response["error"] == "FEATURE_NOT_ACTIVATED") {
@@ -176,7 +177,8 @@ class SOMtodayUser
      */
     public function getGrades()
     {
-        $url      = $this->baseURL . "Cijfers/GetMultiCijfersRecentB64/" . $this->username . "/" . $this->password . "/" . $this->BRIN . "/" . $this->pupilID;
+        $url = $this->baseURL . "Cijfers/Cijfers/" . $this->aToken . "/" . $this->pupilID;
+        
         $response = json_decode(file_get_contents($url), true);
         
         return $response["data"];
@@ -191,7 +193,7 @@ class SOMtodayUser
         
         $daysAhead = (string) $daysAhead;
         
-        $url = $this->baseURL . "Agenda/GetMultiStudentAgendaHuiswerkMetMaxB64/" . $this->username . "/" . $this->password . "/" . $this->BRIN . "/" . $daysAhead . "/" . $this->pupilID;
+        $url = $this->baseURL . "Agenda/Huiswerk/" . $this->aToken . "/" . $daysAhead . "/" . $this->pupilID;
         
         $response = json_decode(file_get_contents($url), true);
         
@@ -206,7 +208,7 @@ class SOMtodayUser
     {
         $date = (time() + ($daysAhead * 86400)) * 1000;
         
-        $url      = $this->baseURL . "Agenda/GetMultiStudentAgendaB64/" . $this->username . "/" . $this->password . "/" . $this->BRIN . "/" . (string) $date . "/" . $this->pupilID;
+        $url = $this->baseURL . "Agenda/Agenda/" . $this->aToken . "/" . $date . "/" . $this->pupilID;
         $response = json_decode(file_get_contents($url), true);
         
         
@@ -218,14 +220,13 @@ class SOMtodayUser
      * 
      * @param Int $homeworkID The "huiswerkid" returned by getHomework()
      * @param Int $appointmentID Yhe "afspraakid" returneb by getHomework()
-     * @param Boolean $status The status you want to give that assignment. True is done, false is not done.
+     * @param Boolean $done The status you want to give that assignment. True is done, false is not done.
      * 
      * @return Boolean True if the status change succeeded, false if not.
      */
-    public function changeHomeworkStatus($homeworkID, $appointmentID, $status)
+    public function changeHomeworkStatus($homeworkID, $appointmentID, $done)
     {
-        
-        $url = $this->baseURL . "Agenda/HuiswerkDoneB64/" . $this->username . "/" . $this->password . "/" . $this->BRIN . "/" . (string) $appointmentID . "/" . (string) $homeworkID . "/" . (string) $status;
+        $url = $this->baseURL . "Agenda/Vink/" . $this->aToken . "/" . (string) $appointmentID . "/" . (string) $homeworkID . "/" . (string) $done;
         
         $responseStatus = json_decode( file_get_contents( $url ), true)["status"];
         
