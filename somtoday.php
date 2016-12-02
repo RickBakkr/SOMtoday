@@ -3,6 +3,7 @@
 /**
  * @author Rick Bakker <rickbakkr@gmail.com>
  * @version 2.0.0
+ * @license MIT
  * 
  * Please be aware of this:
  * Even though the class is functional at the time of release, SOM might do changes in the near future which will break the class! 
