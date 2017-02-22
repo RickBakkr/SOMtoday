@@ -220,7 +220,7 @@ class SOMtoday
      * Changes the status of the given homework.
      * 
      * @param Int $homeworkID The "huiswerkid" returned by getHomework()
-     * @param Int $appointmentID Yhe "afspraakid" returneb by getHomework()
+     * @param Int $appointmentID The "afspraakid" returned by getHomework()
      * @param Boolean $done The status you want to give that assignment. True is done, false is not done.
      * 
      * @return Boolean True if the status change succeeded, false if not.
