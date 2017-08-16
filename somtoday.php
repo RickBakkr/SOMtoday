@@ -42,7 +42,7 @@ class SOMtoday
      * @param String $password User's SOMtoday password
      * @param String $schoolName The name of your school, as found on http://servers.somtoday.nl
      * @param String $type Tells the class to either use -elo
-     * @param String $BRIN The BRIN-code of your school, an unique identifier
+     * @param String $BRIN The BRIN-code of your school, a unique identifier
      */
     function __construct($username, $password, $schoolName, $type = "pupil", $BRIN = null)
     {
