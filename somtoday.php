@@ -69,18 +69,13 @@ class SOMtoday
      */
     private function brinLookup($schoolIdentifier)
     {
-        $servers = file_get_contents('http://servers.somtoday.nl/');
+        $servers = file_get_contents('https://servers.somtoday.nl/');
         $serverList = json_decode($servers, true);
             
         if(is_array($serverList)) 
         {
-            foreach($serverList[0]['instellingen'] as $settings)
-            {
-                if($settings['afkorting'] == $schoolIdentifier)
-                {
-                    return $settings['brin'];
-                }
-            }
+			$id = array_search($schoolIdentifier, array_column($serverList[0]['instellingen'], 'afkorting'));
+			return $serverList[0]['instellingen'][$id]['brin'];
         }
         return false;
     }
