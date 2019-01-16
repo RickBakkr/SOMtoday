@@ -1,0 +1,18 @@
+{
+    "name": "rbakker/somtodayapi",
+    "description": "A PHP implementation of the SOMtoday mobile API",
+    "authors": [
+        {
+            "name": "Rick Bakker",
+            "email": "rickbakkr@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "SOMtodayAPI\\": "src/"
+        }
+    },
+    "require": {
+        "php-curl-class/php-curl-class": "^8.5"
+    }
+}
