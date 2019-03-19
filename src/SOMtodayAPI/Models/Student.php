@@ -42,4 +42,10 @@ class Student implements Fillable {
         $request = Request::get('/rest/v1/resultaten/huidigVoorLeerling/' . $this->id);
         return Grade::fillFromArray($request->items);
     }
+
+    public function getHomework() {
+      // SWIGemaakt = homework.
+      $request = Request::get('/rest/v1/swigemaakt');
+      return SWIGemaakt::fillFromArray($request->items);
+    }
 }
