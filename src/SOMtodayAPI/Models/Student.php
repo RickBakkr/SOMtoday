@@ -43,7 +43,12 @@ class Student implements Fillable {
         return Grade::fillFromArray($request->items);
     }
 
-    public function getHomework() {
+    public function getStudiewijzeritemafspraaktoekenningen($from = null) {
+        $request = Request::get('/rest/v1/studiewijzeritemafspraaktoekenningen' . (!is_null($from)?$from:''));
+        return Studiewijzeritemafspraaktoekenning::fillFromArray($request->items);
+    }
+
+    public function getSWIGemaakt() {
       // SWIGemaakt = homework.
       $request = Request::get('/rest/v1/swigemaakt');
       return SWIGemaakt::fillFromArray($request->items);

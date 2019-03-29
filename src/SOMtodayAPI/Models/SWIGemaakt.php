@@ -30,4 +30,4 @@ class SWIGemaakt implements Fillable {
       }
       return $collection;
   }
-} 
+}
