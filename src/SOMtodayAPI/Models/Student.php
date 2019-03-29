@@ -43,6 +43,26 @@ class Student implements Fillable {
         return Grade::fillFromArray($request->items);
     }
 
+    public function getAppointments() {
+        $request = Request::get('/rest/v1/afspraken');
+        return Appointment::fillFromArray($request->items);
+    }
+
+    public function getObservations() {
+        $request = Request::get('/rest/v1/waarnemingen');
+        return Observation::fillFromArray($request->items);
+    }
+
+    public function getMeasures() {
+        $request = Request::get('/rest/v1/maatregeltoekenningen');
+        return Measure::fillFromArray($request->items);
+    }
+
+    public function getAbsence() {
+        $request = Request::get('/rest/v1/absentiemeldingen');
+        return Absence::fillFromArray($request->items);
+    }
+
     public function getStudiewijzeritemafspraaktoekenningen($from = null) {
         $request = Request::get('/rest/v1/studiewijzeritemafspraaktoekenningen' . (!is_null($from)?$from:''));
         return Studiewijzeritemafspraaktoekenning::fillFromArray($request->items);
