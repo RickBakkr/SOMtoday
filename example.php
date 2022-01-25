@@ -6,20 +6,28 @@
  * Time: 20:09
  */
 
+include_once("./src/SOMtodayAPI/SOMtoday.php");
 use SOMtodayAPI\SOMtoday;
 
+$uuid = '';
+$username = '412';
+$password = 'MyPassword';
+$mySchool;
+
 $allSchools = SOMtoday::getSchools();
-
-$uuid = '2169e4bd-f4ff-4665-97ab-7bea4749b800';
-$username = '147219';
-$password = 'inolongerhaveaccesstosomtoday';
-
+foreach($allSchools as $school){
+        if ($school->naam == "Rietschans College"){
+                $mySchool = $school;
+                $uuid = $school->uuid;
+        }
+}
 $som = new SOMtodayAPI\SOMtoday($uuid, $username, $password);
 
 // Array of Student objects
 $students = $som->getStudents();
+
 // One specific student
-$student = $som->getStudent(1290286080);
+$student = $som->getStudent(3061729886130);
 
 // Get grades belonging to a specific student
 $student->getGrades();

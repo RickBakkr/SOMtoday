@@ -8,6 +8,8 @@
 
 namespace SOMtodayAPI\SOMtodayAPI\Models;
 
+include_once(__DIR__ . "/../Interfaces/Fillable.php");
+include_once(__DIR__ . "/../Services/Request.php");
 
 use SOMtodayAPI\SOMtodayAPI\Interfaces\Fillable;
 use SOMtodayAPI\SOMtodayAPI\Services\Request;
