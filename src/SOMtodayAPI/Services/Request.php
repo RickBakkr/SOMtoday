@@ -40,16 +40,14 @@ class Request {
 
 	public static function get($uri) {
 		$curl = self::init();
-		echo self::$_baseURL . $uri;
 		$curl->createCurl(self::$_baseURL . $uri);
 		if(isset($curl->response->error)) {
 			throw new RequestException($curl->response->error_description);
 		}
 		if ($curl->error) {
-			print_r($curl->__tostring());
 			throw new RequestException('cURL Error: ' . $curl->getHttpStatus() . ': ' . $curl->errorMessage);
 		}
-		return $curl->__tostring();
+		return json_decode($curl->__tostring());
 	}
 
 	public static function getOrdinary($url) {

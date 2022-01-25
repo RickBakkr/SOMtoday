@@ -15,7 +15,13 @@ use SOMtodayAPI\SOMtodayAPI\Exceptions\RequestException;
 class Auth {
 	public static function login($uuid, $username, $password) {
 		$curl = new Curl();
-		$postFields = ['grant_type' => 'password', 'username' => $uuid . '\\' . $username, 'password' => $password, 'scope' => 'openid', 'client_id', 'D50E0C06-32D1-4B41-A137-A9A850C892C2'];
+		$postFields = array(
+			'username' => $uuid . "\\" . $username,
+			'password' => $password,
+			'grant_type' => 'password',
+			'scope' => 'openid',
+			'client_id' => 'D50E0C06-32D1-4B41-A137-A9A850C892C2',
+		);
 		$curl->setHeaders([
 			'Accept' => 'application/json',
 			'Content-Type' => 'application/x-www-form-urlencoded',
@@ -26,11 +32,10 @@ class Auth {
 		if(isset($curl->response->error)) {
 			throw new AuthException($curl->response->error_description);
 		}
-
 		if ($curl->error) {
 			throw new AuthException('cURL Error: ' . $curl->getHttpStatus() . ': ' . $curl->errorMessage);
 		}
-		echo $curl->__tostring() . "\n";
+
 		$response = json_decode($curl->__tostring());
 
 		if (isset($response->error)){
